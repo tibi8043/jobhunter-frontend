@@ -7,6 +7,7 @@ interface InputFieldProps {
   placeholder?: string;
   value: any;
   type?: string;
+  className?: string;
   onChange?: (value: any) => void;
 }
 
@@ -17,6 +18,7 @@ export default function InputField({
   labelFor,
   value,
   type,
+  className,
   onChange,
 }: InputFieldProps) {
   const [inputValue, setValue] = useState(value);
@@ -38,7 +40,7 @@ export default function InputField({
         id={labelFor}
         type={type || "string"}
         placeholder={placeholder}
-        className="input input-bordered w-full max-w-xs my-2 mb-4"
+        className={className}
       />
     </>
   );

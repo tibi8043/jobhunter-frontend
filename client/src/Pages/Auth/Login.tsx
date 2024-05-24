@@ -23,6 +23,7 @@ export default function Login() {
             placeholder="john.doe@gmail.com"
             value={email}
             onChange={(value) => setEmail(value)}
+            className="defaultInputField"
           ></InputField>
 
           <InputField
@@ -32,6 +33,7 @@ export default function Login() {
             placeholder="Password"
             value={password}
             onChange={(value) => setPassword(value)}
+            className="defaultInputField"
           ></InputField>
 
           <button

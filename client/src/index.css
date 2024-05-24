@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.defaultInputField {
+  @apply input input-bordered w-full max-w-xs my-2 mb-4;
+}
