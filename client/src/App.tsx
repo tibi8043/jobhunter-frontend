@@ -5,7 +5,8 @@ import Layout from "./Pages/Layout/Layout";
 import Menu from "./Pages/Layout/Menu";
 import Login from "./Pages/Auth/Login";
 import Register from "./Pages/Auth/Register";
-
+import RequireAuth from "./Pages/Auth/Require";
+import Profile from "./Pages/Profile/Profile";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -19,10 +20,19 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
-      },
+      },      
       {
         path: "/register",
         element: <Register />,
+      },
+      {
+        element: <RequireAuth />,
+        children: [
+          {
+            path: "/profile",
+            element: <Profile />,
+          },
+        ],
       },
     ],
   },
