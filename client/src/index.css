@@ -3,5 +3,20 @@
 @tailwind utilities;
 
 .defaultInputField {
-  @apply input input-bordered w-full max-w-xs my-2 mb-4;
+  @apply input input-bordered w-full max-w-xs my-2 mb-6;
+}
+
+/* scrollbar.css */
+
+.scrollbar-rounded::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-rounded::-webkit-scrollbar-thumb {
+  @apply bg-primary;
+  border-radius: 10px;
+}
+
+* {
+  @apply scrollbar-rounded;
 }

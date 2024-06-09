@@ -1,11 +1,12 @@
 import { useState } from "react";
 import InputField from "../../Components/InputField";
-import { Role, RolePayload } from "../../Models/enums";
+import { RolePayload } from "../../Models/enums";
 import { Link, Navigate } from "react-router-dom";
 import { useLoginMutation, useRegisterMutation } from "../../Redux/Api/authApi";
 import {
   IExperiencePayload,
   ILoginResponse,
+  IUser,
   IUserPayload,
 } from "../../Redux/interfaces";
 import { useAddExperienceMutation } from "../../Redux/Api/experiencesApi";
@@ -22,37 +23,26 @@ export default function Register() {
     useAddExperienceMutation();
 
   const dispatch = useDispatch();
+  const [user, setUser] = useState<IUserPayload>({
+    role: RolePayload.JOB_SEEKER,
+  } as IUserPayload);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [role, setRole] = useState(Role.JOB_SEEKER);
   const [experiences, setExperiences] = useState("");
 
   async function onSubmit(): Promise<any> {
-    if (email && password && fullName && role) {
+    if (user.email && user.password && user.fullname && user.role) {
       try {
-        const payload: IUserPayload = {
-          email: email,
-          password: password,
-          fullname: fullName,
-          role:
-            role === Role.JOB_SEEKER
-              ? RolePayload.JOB_SEEKER
-              : RolePayload.JOB_ADVERTISER,
-        };
-        await registerService(payload);
+        await registerService(user);
 
         const loginResponse: ILoginResponse = await loginService({
-          email: payload.email,
-          password: payload.password,
+          email: user.email,
+          password: user.password,
           strategy: "local",
         }).unwrap();
 
         dispatch(login(loginResponse));
 
-        if (experiences !== "" && role === Role.JOB_SEEKER) {
-          console.log("Experiences");
+        if (experiences !== "" && user.role === RolePayload.JOB_SEEKER) {
           console.log(experiences);
           let experiencePayload = parseStringToExperiences(experiences);
           if (experiencePayload) {
@@ -60,9 +50,6 @@ export default function Register() {
             await addExperiences(experiencePayload);
           }
         }
-
-        console.log("Submit form");
-        console.log(payload);
       } catch (err) {
         console.log(err);
       }
@@ -103,8 +90,8 @@ export default function Register() {
         labelFor="email"
         type="email"
         placeholder="john.doe@gmail.com"
-        value={email}
-        onChange={(value) => setEmail(value)}
+        value={user.email || ""}
+        onChange={(event) => setUser({ ...user, email: event.target.value })}
       ></InputField>
 
       <InputField
@@ -113,8 +100,8 @@ export default function Register() {
         labelFor="password"
         type="password"
         placeholder="Password"
-        value={password}
-        onChange={(value) => setPassword(value)}
+        value={user.password || ""}
+        onChange={(event) => setUser({ ...user, password: event.target.value })}
       ></InputField>
 
       <InputField
@@ -123,25 +110,27 @@ export default function Register() {
         labelFor="full-name"
         type="text"
         placeholder="John Doe"
-        value={fullName}
-        onChange={(value) => setFullName(value)}
+        value={user.fullname || ""}
+        onChange={(event) => setUser({ ...user, fullname: event.target.value })}
       ></InputField>
 
       <label htmlFor="role">Role</label>
       <select
         className="defaultInputField select"
         id="role"
-        value={role}
-        onChange={(e) => setRole(e.target.value as Role)}
+        value={user.role}
+        onChange={(e) => {
+          setUser({ ...user, role: e.target.value as RolePayload });
+        }}
       >
-        {Object.values(Role).map((role) => (
+        {Object.values(RolePayload).map((role) => (
           <option key={role} value={role}>
             {role}
           </option>
         ))}
       </select>
-
-      {role === Role.JOB_SEEKER && (
+      {user.role}
+      {user.role === RolePayload.JOB_SEEKER && (
         <>
           <label htmlFor="experiences">Experiences</label>
           <textarea

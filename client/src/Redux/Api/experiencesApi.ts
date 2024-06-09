@@ -1,6 +1,10 @@
 // api.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { IExperiencePayload, IExperienceResponse } from "../interfaces";
+import {
+  IAllExperienceResponse,
+  IExperiencePayload,
+  IExperienceResponse,
+} from "../interfaces";
 
 export const experiencesApi = createApi({
   reducerPath: "experiencesApi",
@@ -28,7 +32,7 @@ export const experiencesApi = createApi({
       }),
     }),
 
-    getUserExperience: builder.query<IExperienceResponse[], void>({
+    getUserExperience: builder.query<IAllExperienceResponse, void>({
       query: () => ({
         url: "/experiences",
         method: "GET",

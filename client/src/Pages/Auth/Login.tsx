@@ -3,27 +3,24 @@ import { Link, Navigate, NavLink } from "react-router-dom";
 import InputField from "../../Components/InputField";
 import { useLoginMutation } from "../../Redux/Api/authApi";
 import { useDispatch } from "react-redux";
-import { ILoginResponse } from "../../Redux/interfaces";
+import { ILoginPayload, ILoginResponse } from "../../Redux/interfaces";
 import { login } from "../../Redux/Slices/authSlice";
 
 export default function Login() {
   const [loginService, { isSuccess }] = useLoginMutation();
   const dispatch = useDispatch();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");  
+
+  const [user, setUser] = useState<ILoginPayload>({} as ILoginPayload);
+
   async function onSubmit(): Promise<any> {
-    console.log("Submitting form");
     try {
       const loginResponse: ILoginResponse = await loginService({
-        email: email,
-        password: password,
+        email: user.email,
+        password: user.password,
         strategy: "local",
       }).unwrap();
 
       dispatch(login(loginResponse));
-
-      console.log(email);
-      console.log(password);
     } catch (err) {
       console.log(err);
     }
@@ -41,8 +38,8 @@ export default function Login() {
           labelFor="email"
           type="email"
           placeholder="john.doe@gmail.com"
-          value={email}
-          onChange={(value) => setEmail(value)}
+          value={user.email || ""}
+          onChange={(value) => setUser({ ...user, email: value.target.value })}
           className="defaultInputField"
         ></InputField>
 
@@ -51,8 +48,10 @@ export default function Login() {
           labelFor="password"
           type="password"
           placeholder="Password"
-          value={password}
-          onChange={(value) => setPassword(value)}
+          value={user.password || ""}
+          onChange={(value) =>
+            setUser({ ...user, password: value.target.value })
+          }
           className="defaultInputField"
         ></InputField>
 

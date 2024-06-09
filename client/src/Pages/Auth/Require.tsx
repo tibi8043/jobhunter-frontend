@@ -6,6 +6,7 @@ export default function RequireAuth({ children }: any) {
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
   if (isAuthenticated) {
+    console.log("authenticated");
     return children;
   }
 

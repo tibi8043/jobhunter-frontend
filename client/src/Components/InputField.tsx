@@ -21,27 +21,19 @@ export default function InputField({
   className,
   onChange,
 }: InputFieldProps) {
-  const [inputValue, setValue] = useState(value);
-
-  function valueChange(event: any) {
-    let value = event.target.value;
-    if (onChange) {
-      onChange(value);
-    }
-    setValue(value);
-  }
-
   return (
     <>
-      <label htmlFor={labelFor}>{label}</label>
-      <input
-        value={inputValue}
-        onInput={(event) => valueChange(event)}
-        id={labelFor}
-        type={type || "string"}
-        placeholder={placeholder}
-        className={className}
-      />
+      <div className="flex flex-col">
+        <label htmlFor={labelFor}>{label}</label>
+        <input
+          value={value}
+          onChange={onChange}
+          id={labelFor}
+          type={type || "string"}
+          placeholder={placeholder}
+          className={className}
+        />
+      </div>
     </>
   );
 }

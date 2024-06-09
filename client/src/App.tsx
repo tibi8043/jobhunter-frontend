@@ -6,7 +6,12 @@ import Menu from "./Pages/Layout/Menu";
 import Login from "./Pages/Auth/Login";
 import Register from "./Pages/Auth/Register";
 import RequireAuth from "./Pages/Auth/Require";
-import Profile from "./Pages/Profile/Profile";
+import UserProfile from "./Pages/Profile/UserProfile";
+import { useSelector } from "react-redux";
+import { RootState } from "./Redux/store";
+import JobAdvertiserProfile from "./Pages/Profile/JobAdvertiserProfile";
+import JobDescription from "./Pages/Layout/JobDescription";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -20,19 +25,30 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
-      },      
+      },
       {
         path: "/register",
         element: <Register />,
       },
       {
-        element: <RequireAuth />,
-        children: [
-          {
-            path: "/profile",
-            element: <Profile />,
-          },
-        ],
+        path: "profile/company",
+        element: (
+          <RequireAuth>
+            <JobAdvertiserProfile />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: "jobs/:id",
+        element: <JobDescription />,
+      },
+      {
+        path: "profile/user",
+        element: (
+          <RequireAuth>
+            <UserProfile />
+          </RequireAuth>
+        ),
       },
     ],
   },

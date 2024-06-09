@@ -1,9 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { logout, selectIsAuthenticated } from "../../Redux/Slices/authSlice";
+import { RootState } from "../../Redux/store";
+import { RolePayload } from "../../Models/enums";
 
 export default function Menu() {
   const isAuthenticated = useSelector(selectIsAuthenticated);
+  const actualUser = useSelector((state: RootState) => state.auth.user);
+
   console.log(isAuthenticated);
   const dispatch = useDispatch();
   function handleLogout() {
@@ -38,9 +42,27 @@ export default function Menu() {
               <li>
                 <NavLink to="/">Home</NavLink>
               </li>
+              {isAuthenticated ? (
+                <li>
+                  {actualUser?.role === RolePayload.JOB_ADVERTISER ? (
+                    <NavLink to="/profile/company">
+                      Profile {actualUser?.role}
+                    </NavLink>
+                  ) : (
+                    <NavLink to="/profile/user">
+                      Profile {actualUser?.role}
+                    </NavLink>
+                  )}
+                </li>
+              ) : (
+                <></>
+              )}
             </ul>
           </div>
-          <NavLink className="btn btn-ghost text-xl" to="/">
+          <NavLink
+            className="mx-2 btn btn-ghost text-xl hover:bg-primary hover:text-primary-content"
+            to="/"
+          >
             Jobhunter
           </NavLink>
         </div>
@@ -49,6 +71,17 @@ export default function Menu() {
             <li>
               <NavLink to="/">Home</NavLink>
             </li>
+            {isAuthenticated ? (
+              <li>
+                {actualUser?.role === RolePayload.JOB_ADVERTISER ? (
+                  <NavLink to="profile/company">Profile</NavLink>
+                ) : (
+                  <NavLink to="profile/user">Profile</NavLink>
+                )}
+              </li>
+            ) : (
+              <></>
+            )}
           </ul>
         </div>
         <div className="navbar-end">
